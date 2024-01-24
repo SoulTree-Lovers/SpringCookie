@@ -14,7 +14,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     // login logic
-    public void login(
+    public String login(
             LoginRequest loginRequest,
             HttpServletResponse httpServletResponse
     ) {
@@ -26,26 +26,28 @@ public class UserService {
         if (optionalUser.isPresent()) {
             var userDto = optionalUser.get();
 
-            if (userDto.getPassword().equals(pw)) {
+            if (userDto.getPassword().equals(pw)) { // 로그인 성공 시
+                return userDto.getId();
+
                 // cookie에 해당 정보를 저장
-                var cookie = new Cookie("authorization-cookie", userDto.getId());
+                /*var cookie = new Cookie("authorization-cookie", userDto.getId());
                 cookie.setDomain("localhost"); // 도메인 지정 (naver.com , daum.net, ...)
                 cookie.setPath("/");
                 cookie.setMaxAge(-1); // 세션과 동일 (연결된 동안만 사용)
 
-                /** 보안 관련 설정 */
+                *//** 보안 관련 설정 *//*
                 cookie.setHttpOnly(true);   // javascript로 쿠키값을 해킹할 수 없도록 설정
                 cookie.setSecure(true);     // https에서만 사용되도록 설정
 //                cookie.setMaxAge(10); // 10초 간 유효
 
-                httpServletResponse.addCookie(cookie);
-
-            } else {
+                httpServletResponse.addCookie(cookie);*/
 
             }
 
         } else {
             new RuntimeException("User not found");
         }
+
+        return null;
     }
 }
