@@ -5,10 +5,12 @@ import com.example.cookie.model.LoginRequest;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -22,11 +24,12 @@ public class UserService {
         var pw = loginRequest.getPassword();
 
         var optionalUser = userRepository.findByName(id);
-
         if (optionalUser.isPresent()) {
             var userDto = optionalUser.get();
+            log.info("{}", userDto);
 
             if (userDto.getPassword().equals(pw)) { // 로그인 성공 시
+                log.info("로그인 성공");
                 return userDto.getId();
 
                 // cookie에 해당 정보를 저장
