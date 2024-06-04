@@ -28,7 +28,10 @@ public class UserApiController {
 
         var optionalUserDto = userRepository.findById(authorizationCookie);
 
-        return optionalUserDto.get();
+        if (optionalUserDto.isPresent()) {
+            return optionalUserDto.get();
+        }
+        return null;
 
 //        var cookies = httpServletRequest.getCookies();
 //
@@ -44,13 +47,18 @@ public class UserApiController {
 
     @GetMapping("/me2")
     public UserDto me2(
-            @RequestHeader(name = "authorization", required = false)
-            String authorizationCookie
+            @RequestHeader(name = "authorization", required = false) String authorizationHeader
     ) {
-        log.info("authorizationCookie: {}", authorizationCookie);
+        log.info("authorizationHeader: {}", authorizationHeader);
 
-        var optionalUserDto = userRepository.findById(authorizationCookie);
+//        userRepository.printUserDtoList();
 
-        return optionalUserDto.get();
+        var optionalUserDto = userRepository.findById(authorizationHeader);
+
+        if (optionalUserDto.isPresent()) {
+            return optionalUserDto.get();
+        }
+
+        return null;
     }
 }
